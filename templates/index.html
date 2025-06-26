@@ -1,1 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"> <!-- Default to dark mode -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel - Your AI Therapist</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Marked.js library for rendering Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Custom configuration for Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable class-based dark mode
+            theme: {
+                extend: {
+                    // Using the darker, more vibrant color theme
+                    colors: {
+                        'brand-bg': '#f1f5f9',      
+                        'brand-sidebar': '#e2e8f0', 
+                        'brand-main': '#e2e8f0',      
+                        'brand-input': '#e2e8f0',     
+                        'brand-hover': '#cbd5e1',     
+                        'brand-text': '#1e293b',      
+                        'user-bubble': '#93c5fd',  
+                        'ai-bubble': '#a7f3d0',        
+                        'brand-accent': '#6366f1',    
 
+                        'dark-bg': '#1e1f22',
+                        'dark-sidebar': '#2b2d31',
+                        'dark-main': '#313338',
+                        'dark-input': '#383a40',
+                        'dark-hover': '#3f4248',
+                        'dark-text': '#dbdee1',
+                        'dark-accent': '#7289da',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Custom Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d9e6; }
+        html.dark ::-webkit-scrollbar-thumb { background: #4f545c; }
+        ::-webkit-scrollbar-thumb:hover { background: #b8c1d1; }
+        html.dark ::-webkit-scrollbar-thumb:hover { background: #72767d; }
+        .markdown-content ul, .markdown-content ol { list-style-position: inside; padding-left: 1.25rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .markdown-content p { margin-bottom: 0.5rem; }
+        .markdown-content p:last-child { margin-bottom: 0; }
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 { font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; }
+        .markdown-content h1 { font-size: 1.5em; }
+        .markdown-content h2 { font-size: 1.25em; }
+        .markdown-content h3 { font-size: 1.1em; }
+        .markdown-content strong { font-weight: 600; }
+    </style>
+</head>
+<body class="bg-brand-bg text-brand-text dark:bg-dark-bg dark:text-dark-text antialiased">
+
+    <div id="app-container" class="flex h-screen w-screen">
+        <!-- Sidebar Navigation -->
+        <nav class="bg-brand-sidebar dark:bg-dark-sidebar w-16 flex flex-col items-center py-4 space-y-4 border-r border-indigo-100 dark:border-transparent">
+            <!-- Sidebar Buttons -->
+            <button id="new-chat-btn" title="New Chat" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-hover dark:hover:bg-dark-hover transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+            </button>
+            <button id="chat-view-btn" title="Current Chat" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-hover dark:hover:bg-dark-hover transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+            </button>
+            <button id="history-btn" title="Chat History" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-hover dark:hover:bg-dark-hover transition-colors duration-200">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </button>
+            <button id="settings-btn" title="Settings" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-hover dark:hover:bg-dark-hover transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            </button>
+            <!-- Theme Toggle -->
+            <div class="mt-auto mb-4">
+                <button id="theme-toggle" title="Toggle Theme" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-hover dark:hover:bg-dark-hover transition-colors duration-200">
+                    <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col bg-brand-main dark:bg-dark-main">
+            <!-- Chat View -->
+            <div id="chat-view" class="flex flex-col h-full">
+                <header class="flex-shrink-0 p-4 border-b border-indigo-100 dark:border-gray-700">
+                    <h1 class="text-xl font-semibold">Pixel</h1>
+                </header>
+                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
+                    <!-- Chat messages inserted here -->
+                </div>
+                <!-- Message Input Form -->
+                <div class="flex-shrink-0 p-4 border-t border-indigo-100 dark:border-gray-700 bg-brand-main dark:bg-dark-main">
+                    <div class="relative">
+                        <textarea id="chat-input" rows="1" class="w-full p-2 pr-12 rounded-lg bg-white dark:bg-dark-input text-brand-text dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-brand-accent dark:focus:ring-dark-accent resize-none"></textarea>
+                        <button id="send-btn" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full text-white bg-brand-accent hover:opacity-80 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.428A1 1 0 0010 16h.002a1 1 0 00.725-.3l6-6a1 1 0 00-1.414-1.414l-4.293 4.293a1 1 0 01-1.414-1.414l4.293-4.293a1 1 0 00-.707-1.707l-5.146 1.47a1 1 0 00-.724.3l-4.293 4.293z" /></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History View -->
+            <div id="history-view" class="hidden p-8 flex flex-col h-full">
+                <div class="flex justify-between items-center mb-6 flex-shrink-0">
+                    <h1 class="text-2xl font-bold">Chat History</h1>
+                    <button id="delete-all-history-btn" class="px-3 py-1 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
+                        Delete All
+                    </button>
+                </div>
+                <div id="history-list" class="flex-1 overflow-y-auto space-y-2">
+                    <!-- History items will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings-view" class="hidden p-8">
+                <h1 class="text-2xl font-bold mb-6">Settings</h1>
+                <div class="space-y-6">
+                    <div>
+                        <label for="user-name-input" class="block text-sm font-medium mb-1">Your Name</label>
+                        <input type="text" id="user-name-input" class="w-full p-2 rounded-lg bg-brand-input dark:bg-dark-input focus:outline-none focus:ring-2 focus:ring-brand-accent dark:focus:ring-dark-accent">
+                    </div>
+                    <div>
+                        <label for="persona-input" class="block text-sm font-medium mb-1">Pixel's Persona</label>
+                        <textarea id="persona-input" rows="6" class="w-full p-2 rounded-lg bg-brand-input dark:bg-dark-input focus:outline-none focus:ring-2 focus:ring-brand-accent dark:focus:ring-dark-accent"></textarea>
+                    </div>
+                    <button id="save-settings-btn" class="px-4 py-2 bg-brand-accent text-white rounded-lg hover:opacity-80">Save Settings</button>
+                    <div id="settings-feedback" class="text-sm"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Element Selectors ---
+            const chatView = document.getElementById('chat-view');
+            const settingsView = document.getElementById('settings-view');
+            const historyView = document.getElementById('history-view');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+            const newChatBtn = document.getElementById('new-chat-btn');
+            const chatViewBtn = document.getElementById('chat-view-btn');
+            const historyBtn = document.getElementById('history-btn');
+            const historyList = document.getElementById('history-list');
+            const settingsBtn = document.getElementById('settings-btn');
+            const saveSettingsBtn = document.getElementById('save-settings-btn');
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const userNameInput = document.getElementById('user-name-input');
+            const personaInput = document.getElementById('persona-input');
+            const settingsFeedback = document.getElementById('settings-feedback');
+            const deleteAllHistoryBtn = document.getElementById('delete-all-history-btn');
+
+            let conversationHistory = [];
+            let hasUnsavedChanges = false;
+            const API_BASE_URL = 'http://127.0.0.1:5000'; 
+
+            const scrollToBottom = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
+
+            const addMessageToUI = (role, content, isStreaming = false) => {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+                const messageBubble = document.createElement('div');
+                messageBubble.className = `markdown-content max-w-md lg:max-w-2xl p-3 rounded-lg ${
+                    role === 'user'
+                        ? 'bg-user-bubble text-indigo-900' 
+                        : 'bg-ai-bubble text-amber-900 dark:bg-dark-sidebar dark:text-dark-text'
+                }`;
+                if (role === 'ai') {
+                    messageBubble.innerHTML = marked.parse(content);
+                } else {
+                    messageBubble.innerText = content;
+                }
+                if (role === 'ai' && isStreaming) { 
+                    messageBubble.id = 'streaming-bubble'; 
+                }
+                messageWrapper.appendChild(messageBubble);
+                chatMessages.appendChild(messageWrapper);
+                scrollToBottom();
+                return messageBubble;
+            };
+            
+            const updateStreamingMessage = (newChunk) => {
+                const streamingBubble = document.getElementById('streaming-bubble');
+                if (streamingBubble) {
+                    const currentText = streamingBubble.getAttribute('data-raw-text') || '';
+                    const newText = currentText + newChunk;
+                    streamingBubble.innerHTML = marked.parse(newText);
+                    streamingBubble.setAttribute('data-raw-text', newText);
+                    scrollToBottom();
+                }
+            };
+
+            const handleSendMessage = async () => {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                //if (conversationHistory.length === 0) {
+                //    const welcomeMessage = "Hello! I'm Pixel. How can I assist you today?";
+                //    addMessageToUI('ai', welcomeMessage);
+                //    conversationHistory.push({ role: 'ai', content: welcomeMessage });
+                //}
+                
+                addMessageToUI('user', message);
+                conversationHistory.push({ role: 'user', content: message });
+                hasUnsavedChanges = true;
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+                
+                let streamingBubble = addMessageToUI('ai', '', true);
+                streamingBubble.setAttribute('data-raw-text', '');
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/chat`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: message, history: conversationHistory }),
+                    });
+                    if (!response.ok) {
+                        streamingBubble.innerHTML = 'Sorry, an error occurred.';
+                        streamingBubble.classList.add('text-red-500');
+                        return;
+                    }
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let fullResponse = '';
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        const chunk = decoder.decode(value);
+                        const lines = chunk.split('\n\n');
+                        for (const line of lines) {
+                            if (line.startsWith('event: message')) {
+                                const data = JSON.parse(line.split('data: ')[1]);
+                                const contentChunk = data.content;
+                                fullResponse += contentChunk;
+                                updateStreamingMessage(contentChunk);
+                            }
+                        }
+                    }
+                    streamingBubble.removeAttribute('data-raw-text');
+                    streamingBubble.id = '';
+                    conversationHistory.push({ role: 'ai', content: fullResponse });
+                    hasUnsavedChanges = true;
+                } catch (error) { 
+                    streamingBubble.innerHTML = 'Failed to connect to the server.';
+                    streamingBubble.classList.add('text-red-500');
+                }
+            };
+
+            const saveCurrentChat = async () => {
+                if (!hasUnsavedChanges || conversationHistory.length <= 1) { return; }
+                try {
+                    await fetch(`${API_BASE_URL}/api/history/save`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ history: conversationHistory }),
+                    });
+                    hasUnsavedChanges = false;
+                } catch (error) { console.error("Failed to save history:", error); }
+            };
+
+            const handleNewChat = async () => {
+                await saveCurrentChat();
+                conversationHistory = [];
+                chatMessages.innerHTML = '';
+                hasUnsavedChanges = false;
+            };
+            
+            const showView = (viewToShow) => {
+                chatView.classList.toggle('hidden', viewToShow !== 'chat');
+                settingsView.classList.toggle('hidden', viewToShow !== 'settings');
+                historyView.classList.toggle('hidden', viewToShow !== 'history');
+            };
+
+            const setupTheme = () => {
+                if (localStorage.theme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                    themeIconLight.classList.remove('hidden');
+                    themeIconDark.classList.add('hidden');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    themeIconLight.classList.add('hidden');
+                    themeIconDark.classList.remove('hidden');
+                }
+            };
+
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.theme = isDark ? 'dark' : 'light';
+                setupTheme();
+            });
+
+            const loadSettings = async () => {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/settings`);
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        userNameInput.value = data.userName;
+                        personaInput.value = data.persona;
+                    } else { console.error("Failed to load settings:", data.message); }
+                } catch (error) { console.error("Error fetching settings:", error); }
+            };
+
+            const handleSaveSettings = async () => {
+                const newUserName = userNameInput.value;
+                const newPersona = personaInput.value;
+                settingsFeedback.textContent = 'Saving...';
+                settingsFeedback.className = 'text-sm text-brand-accent dark:text-dark-accent';
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/settings`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userName: newUserName, persona: newPersona }),
+                    });
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        settingsFeedback.textContent = 'Settings saved successfully!';
+                        settingsFeedback.className = 'text-sm text-green-500';
+                    } else {
+                        settingsFeedback.textContent = `Error: ${data.message}`;
+                        settingsFeedback.className = 'text-sm text-red-500';
+                    }
+                } catch (error) {
+                     settingsFeedback.textContent = 'An error occurred while saving.';
+                     settingsFeedback.className = 'text-sm text-red-500';
+                }
+                setTimeout(() => { settingsFeedback.textContent = ''; }, 3000);
+            };
+
+            const handleShowHistory = async () => {
+                showView('history');
+                historyList.innerHTML = '<p>Loading history...</p>';
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/history/list`);
+                    const data = await response.json();
+                    historyList.innerHTML = '';
+                    if(data.status === 'success' && data.files.length > 0) {
+                        data.files.forEach(fileInfo => {
+                            const itemContainer = document.createElement('div');
+                            itemContainer.className = 'flex items-center justify-between p-2 rounded-lg hover:bg-brand-hover dark:hover:bg-dark-hover';
+
+                            const loadButton = document.createElement('button');
+                            loadButton.className = 'text-left flex-grow';
+                            loadButton.textContent = fileInfo.summary;
+                            loadButton.onclick = () => handleLoadHistory(fileInfo.filename); // Access the 'filename' property
+
+                            const deleteButton = document.createElement('button');
+                            deleteButton.className = 'p-1 rounded-full hover:bg-red-200 dark:hover:bg-red-800 text-red-500 ml-2';
+                            deleteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>`;
+                            deleteButton.onclick = (e) => {
+                                e.stopPropagation();
+                                handleDeleteHistory(fileInfo.filename, itemContainer); // Access the 'filename' property
+                            };
+                            
+                            itemContainer.appendChild(loadButton);
+                            itemContainer.appendChild(deleteButton);
+                            historyList.appendChild(itemContainer);
+                        });
+                    } else {
+                        historyList.innerHTML = '<p>No chat history found.</p>';
+                    }
+                } catch(error) {
+                    historyList.innerHTML = '<p class="text-red-500">Failed to load chat history.</p>';
+                }
+            };
+
+            const handleLoadHistory = async (filename) => {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/history/load`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ filename }),
+                    });
+                    const data = await response.json();
+                    if(data.status === 'success') {
+                        conversationHistory = data.history;
+                        chatMessages.innerHTML = '';
+                        conversationHistory.forEach(msg => addMessageToUI(msg.role, msg.content));
+                        hasUnsavedChanges = false;
+                        showView('chat');
+                    } else {
+                        alert(`Error loading history: ${data.message}`);
+                    }
+                } catch (error) {
+                    alert('Failed to connect to server to load history.');
+                }
+            };
+            
+            const handleDeleteHistory = async (filename, itemElement) => {
+                if (!confirm(`Are you sure you want to delete "${filename}"?`)) {
+                    return;
+                }
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/history/delete`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ filename }),
+                    });
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        itemElement.remove();
+                    } else {
+                        alert(`Error deleting history: ${data.message}`);
+                    }
+                } catch (error) {
+                    alert('Failed to connect to server to delete history.');
+                }
+            };
+
+            const handleDeleteAllHistory = async () => {
+                if (!confirm("Are you sure you want to permanently delete ALL chat history? This action cannot be undone.")) {
+                    return;
+                }
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/history/delete_all`, { method: 'POST' });
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        historyList.innerHTML = '<p>No chat history found.</p>';
+                        alert("All chat history has been deleted.");
+                    } else {
+                        alert(`Error: ${data.message}`);
+                    }
+                } catch (error) {
+                    alert('Failed to connect to the server to delete history.');
+                }
+            };
+
+            sendBtn.addEventListener('click', handleSendMessage);
+            chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } });
+            chatInput.addEventListener('input', () => { chatInput.style.height = 'auto'; chatInput.style.height = `${chatInput.scrollHeight}px`; });
+            newChatBtn.addEventListener('click', handleNewChat);
+            chatViewBtn.addEventListener('click', () => showView('chat'));
+            historyBtn.addEventListener('click', handleShowHistory);
+            settingsBtn.addEventListener('click', () => { loadSettings(); showView('settings'); });
+            saveSettingsBtn.addEventListener('click', handleSaveSettings);
+            deleteAllHistoryBtn.addEventListener('click', handleDeleteAllHistory);
+            
+            window.addEventListener('beforeunload', (event) => {
+                if (!hasUnsavedChanges || conversationHistory.length <= 1) { return; }
+                const blob = new Blob([JSON.stringify({ history: conversationHistory })], { type: 'application/json' });
+                navigator.sendBeacon(`${API_BASE_URL}/api/history/save`, blob);
+            });
+            
+            setupTheme();
+        });
+    </script>
+</body>
+</html>
