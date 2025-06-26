@@ -1,4 +1,4 @@
-# **Complete Documentation: RAG Chatbot with Gemini & Qdrant**
+# **RAG Chatbot with Gemini & Qdrant**
 
 This document provides a detailed explanation of the Retrieval-Augmented Generation (RAG) chatbot application. We'll cover its architecture, the core concepts that make it work, the methods it employs, and a step-by-step guide to set it up and run it on any machine.
 
