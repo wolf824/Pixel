@@ -136,6 +136,7 @@ docker run \-p 6333:6333 \-p 6334:6334 \\
     qdrant/qdrant
 
 Leave this terminal window open. It is now running your database.
+You can use Qdrant web dashboard at http://localhost:6333/dashboard.
 
 ### **Step 6: Add Your Documents**
 
@@ -147,8 +148,6 @@ This step reads your PDFs, creates Gemini embeddings, and uploads them to Qdrant
 
 python create\_embeddings.py
 
-**Important:** If you were previously using a different embedding model (like a Hugging Face one), you must first delete your old Qdrant collections to avoid errors from mismatched vector sizes. You can do this by using the Qdrant web dashboard at http://localhost:6334/dashboard.
-
 ### **Step 8: Run the Chat Application**
 
 Finally, it's time to start the chatbot\! In a **third terminal** (or you can reuse the second one after the embedding script finishes), run the main app:
@@ -156,3 +155,5 @@ Finally, it's time to start the chatbot\! In a **third terminal** (or you can re
 python app.py
 
 A web browser tab should automatically open to http://127.0.0.1:5000/. You can now start chatting with your AI assistant\!
+
+
