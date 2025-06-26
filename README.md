@@ -109,6 +109,7 @@ Open your terminal, navigate to where you want to store the project, and clone t
 
 \# Replace the URL with your actual GitHub repository URL  
 git clone https://github.com/wolf824/Pixel.git 
+
 cd pixel-chatbot
 
 ### **Step 3: Install Python Packages**
