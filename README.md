@@ -90,9 +90,9 @@ docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z 
 ### **Step 5: Run the Application\!**
 
 Now, start the main application. This single command launches the web server and the automated background pipeline.
-
+``` bash
 python app.py
-
+```
 Your terminal will show messages confirming that the chatbot components and the background watcher have started. Your default web browser should open automatically to http://127.0.0.1:5000.
 
 ## **📖 How to Use Pixel**
