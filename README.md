@@ -45,7 +45,6 @@ Your Question → Search Your Data → Find Relevant Info → Give Info \+ Quest
 │   └── index.html        \# The single-page frontend for the application  
 ├── .env                  \# Your secret API key for Google Gemini  
 ├── app.py                \# The main script: runs the Flask server AND the automated pipeline  
-├── docker-compose.yml    \# Configuration to easily run the Qdrant database  
 └── requirements.txt      \# List of all Python libraries needed for the project
 
 ## **🚀 How to Set Up and Run (from GitHub)**
