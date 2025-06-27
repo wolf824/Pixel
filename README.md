@@ -54,7 +54,7 @@ Follow these steps to get Pixel running on your local machine.
 ### **Prerequisites**
 
 * [Python 3.8+](https://www.python.org/downloads/)  
-* [Docker](https://www.docker.com/get-started/) and Docker Compose  
+* [Docker](https://www.docker.com/get-started/)
 * [Git](https://git-scm.com/downloads/)
 
 ### **Step 1: Clone the Repository**
