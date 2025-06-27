@@ -101,3 +101,112 @@ Your terminal will show messages confirming that the chatbot components and the 
 * **To Chat:** Just start typing in the input box\!  
 * **To Save a Chat:** The application automatically saves your conversation when you start a new chat, view the history, or close the browser tab.  
 * **To Continue an Old Chat:** Click the "Chat History" icon, find the conversation you want to continue, and click on it. The chat will be loaded. When you add new messages, the history will be automatically updated and re-indexed the next time you navigate away.
+
+# PDF Processing Utilities
+
+This repository contains a collection of Python scripts designed to automate the creation and processing of PDF documents. These tools are ideal for building a local, readable library of articles and for preparing large documents for further analysis or use in RAG (Retrieval-Augmented Generation) applications.
+
+## Table of Contents
+
+1.  **URL to PDF Converter (`url_to_pdf.py`)**
+    * What It Does
+    * Features
+    * How to Use
+    * Files and Folders
+
+2.  **PDF Content Cleaner (`process_pdfs.py`)**
+    * What It Does
+    * Features
+    * How to Use
+    * Files and Folders
+
+---
+
+## 1. URL to PDF Converter (`url_to_pdf.py`)
+
+This script is a powerful tool for converting online articles and web pages into clean, readable, and uniformly styled PDF documents.
+
+### What It Does
+
+The script reads a list of URLs from a text file, fetches the main content from each page, strips away ads and navigation bars, and saves each article as a separate, neatly formatted PDF file in your `data` folder.
+
+**Example:** You have a list of 20 news articles you want to read offline. You paste the URLs into `link.txt`, run the script, and get 20 clean PDF files, one for each article.
+
+### Features
+
+* **Content Extraction:** Uses the `readability` library to intelligently grab only the main article content, ignoring sidebars, ads, and other clutter.
+* **Stateful Processing:** Keeps a log of successfully processed links (`processed_links.log`) so you never process the same link twice.
+* **Automatic Cleanup:** After processing, it automatically removes the successful links from your `link.txt` file, leaving only the ones that may have failed and need attention.
+* **Standardized Formatting:** Applies a consistent, professional style to all generated PDFs for a comfortable reading experience.
+* **Safe Filenames:** Automatically generates valid filenames from article titles.
+
+### How to Use
+
+1.  **Install Dependencies:** Make sure you have the required Python libraries installed.
+    ```bash
+    pip install requests readability-lxml weasyprint
+    ```
+
+2.  **Create `link.txt`:** In the same directory as the script, create a file named `link.txt`.
+
+3.  **Add URLs:** Open `link.txt` and paste the URLs you want to convert, with each URL on a new line.
+    ```
+    [https://example.com/some-interesting-article](https://example.com/some-interesting-article)
+    [https://anothersite.com/another-great-read](https://anothersite.com/another-great-read)
+    ```
+
+4.  **Run the Script:** Open your terminal and run the script.
+    ```bash
+    python url_to_pdf.py
+    ```
+
+5.  **Find Your PDFs:** The script will process each new link and save the resulting PDF files in a `data/` folder.
+
+### Files and Folders
+
+* `url_to_pdf.py`: The script itself.
+* `link.txt` **(You create this)**: Your input file where you list the URLs to be processed.
+* `processed_links.log` (Created by the script): A log file to prevent re-processing links. You can safely ignore this file.
+* `data/` (Created by the script): The output folder where your clean PDF files are saved.
+
+---
+
+## 2. PDF Content Cleaner (`process_pdfs.py`)
+
+This script is designed to process a large, book-style PDF and remove unnecessary content.
+
+### What It Does
+
+The script intelligently cleans a PDF by removing boilerplate sections. It analyzes the PDF's bookmarks (its table of contents) and uses them to identify and extract only the core chapters. It discards sections like "Copyright," "Index," and "Table of Contents." Finally, it merges the useful chapters back together, overwriting the original file in the `data` folder with the new, clean version.
+
+**Example:** You have a 500-page textbook PDF full of front matter and appendices. You run the script, and it automatically removes all the junk, leaving you with a clean PDF containing only the main chapters, ready for reading or analysis.
+
+### Features
+
+* **Interactive Level Selection:** The script analyzes the PDF's bookmarks and interactively asks you which outline level you want to use for splitting (e.g., main parts vs. individual chapters).
+* **Intelligent Title Cleaning:** Automatically removes chapter numbering (like "Chapter 1." or "5.2 -") from filenames during processing.
+* **Smart Exclusion:** Automatically skips boilerplate sections based on a predefined exclusion list (e.g., "Table of Contents," "Index," "About the Author").
+* **Single-Page Chapter Removal:** Skips creating PDFs for chapters that are only one page long (often just a title page).
+* **Automatic Overwrite:** After processing, it merges the useful chapters back into a single, clean PDF, replacing the original file.
+
+### How to Use
+
+1.  **Install Dependencies:** Make sure you have the `pypdf` library.
+    ```bash
+    pip install pypdf
+    ```
+2.  **Place PDFs in `data/`:** Move the large PDF files you want to process into the `data/` directory.
+
+3.  **Run the Script:** Open your terminal and run the script.
+    ```bash
+    python process_pdfs.py
+    ```
+4.  **Interact with the Prompt:** For each PDF, the script will show you the available bookmark levels. Enter the number corresponding to the level you want to use for processing (usually `0` for top-level parts or `1` for chapters).
+
+5.  **Find the Result:** The original PDF file in the `data/` folder will be overwritten with the new, cleaned version containing only the essential content.
+
+### Files and Folders
+
+* `process_pdfs.py`: The script itself.
+* `data/`: The folder where you place your input PDFs and where the final, cleaned output PDFs will be saved.
+
