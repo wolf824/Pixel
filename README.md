@@ -62,6 +62,7 @@ Follow these steps to get Pixel running on your local machine.
 Open your terminal and clone this repository to your local machine.
 
 git clone https://github.com/wolf824/Pixel.git
+
 cd pixel-rag-chatbot
 
 ### **Step 2: Set Up Your API Key**
