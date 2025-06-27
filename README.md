@@ -61,9 +61,11 @@ Follow these steps to get Pixel running on your local machine.
 
 Open your terminal and clone this repository to your local machine.
 
+``` bash
 git clone https://github.com/wolf824/Pixel.git
 
 cd pixel-rag-chatbot
+```
 
 ### **Step 2: Set Up Your API Key**
 
@@ -77,13 +79,17 @@ You need a Google Gemini API key for the text generation part.
 
 Install all the required Python libraries using the requirements.txt file.
 
+``` bash
 pip install \-r requirements.txt
+```
 
 ### **Step 4: Start the Vector Database**
 
 The Qdrant database runs in a Docker container. Start it with this simple command. It will run in the background.
 
+``` bash
 docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
+```
 
 *(The first time you run this, it will download the Qdrant image, which may take a few minutes.)*
 
