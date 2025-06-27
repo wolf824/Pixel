@@ -62,7 +62,7 @@ Follow these steps to get Pixel running on your local machine.
 
 Open your terminal and clone this repository to your local machine.
 
-git clone \[https://github.com/your-username/pixel-rag-chatbot.git\](https://github.com/your-username/pixel-rag-chatbot.git)  
+git clone https://github.com/wolf824/Pixel.git
 cd pixel-rag-chatbot
 
 ### **Step 2: Set Up Your API Key**
@@ -83,7 +83,7 @@ pip install \-r requirements.txt
 
 The Qdrant database runs in a Docker container. Start it with this simple command. It will run in the background.
 
-docker-compose up \-d
+docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
 
 *(The first time you run this, it will download the Qdrant image, which may take a few minutes.)*
 
@@ -101,13 +101,3 @@ Your terminal will show messages confirming that the chatbot components and the 
 * **To Chat:** Just start typing in the input box\!  
 * **To Save a Chat:** The application automatically saves your conversation when you start a new chat, view the history, or close the browser tab.  
 * **To Continue an Old Chat:** Click the "Chat History" icon, find the conversation you want to continue, and click on it. The chat will be loaded. When you add new messages, the history will be automatically updated and re-indexed the next time you navigate away.
-
-## **🤝 How to Contribute**
-
-Contributions are welcome\! If you have ideas for new features, find a bug, or want to improve the code, please feel free to:
-
-1. Fork the repository.  
-2. Create a new branch for your feature (git checkout \-b feature/AmazingNewFeature).  
-3. Commit your changes (git commit \-m 'Add some AmazingNewFeature').  
-4. Push to the branch (git push origin feature/AmazingNewFeature).  
-5. Open a Pull Request.
