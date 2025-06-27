@@ -1,0 +1,12 @@
+langchain
+langchain-google-genai    # For using Google's Gemini models
+langchain-qdrant          # The specific integration for Qdrant vector store
+qdrant-client             # The official Python client for the Qdrant database
+pypdf                     # Required by LangChain to load and process PDF files
+Flask                     # For creating the web server and API endpoints
+python-dotenv             # For managing environment variables from a .env file
+colorama                  # For adding colored text to terminal output for better logging
+gunicorn                  # A production-ready web server, good practice for running Flask apps
+sentence-transformers
+langchain-community
+langchain-huggingface
