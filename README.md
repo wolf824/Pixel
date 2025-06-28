@@ -97,7 +97,7 @@ docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z 
 
 Now, start the main application. This single command launches the web server and the automated background pipeline.
 ``` bash
-python app.py
+python3 app.py
 ```
 Your terminal will show messages confirming that the chatbot components and the background watcher have started. Your default web browser should open automatically to http://127.0.0.1:5000.
 
@@ -163,7 +163,7 @@ The script reads a list of URLs from a text file, fetches the main content from 
 
 4.  **Run the Script:** Open your terminal and run the script.
     ```bash
-    python url_to_pdf.py
+    python3 url_to_pdf.py
     ```
 
 5.  **Find Your PDFs:** The script will process each new link and save the resulting PDF files in a `data/` folder.
@@ -205,7 +205,7 @@ The script intelligently cleans a PDF by removing boilerplate sections. It analy
 
 3.  **Run the Script:** Open your terminal and run the script.
     ```bash
-    python process_pdfs.py
+    python3 process_pdfs.py
     ```
 4.  **Interact with the Prompt:** For each PDF, the script will show you the available bookmark levels. Enter the number corresponding to the level you want to use for processing (usually `0` for top-level parts or `1` for chapters).
 
